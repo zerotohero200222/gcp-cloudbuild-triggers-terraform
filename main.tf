@@ -5,7 +5,7 @@
 # Each service has 2 triggers:
 #   1. PR Build - Triggered on Pull Requests to feature_01
 #   2. Snapshot Build - Triggered on merge to feature_01
-# 
+#
 # Total Triggers: 12 (6 services × 2 trigger types)
 # ============================================================
 
@@ -16,7 +16,7 @@ locals {
     region                = var.region
     repository_owner      = var.repository_owner
     service_account_email = var.service_account_email
-    base_branch          = var.base_branch
+    base_branch           = var.base_branch
   }
 
   # Service definitions
@@ -28,35 +28,35 @@ locals {
         _SPRING_ACTIVE_PROFILE = "feature"
       }
     }
-    
+
     file-upload-service = {
       description = "Build that gets triggered when PR has been raised to feature_01"
       substitutions = {
         _SPRING_ACTIVE_PROFILE = "feature"
       }
     }
-    
+
     gemini-service = {
       description = "Build that gets triggered when PR has been raised to feature_01"
       substitutions = {
         _SPRING_ACTIVE_PROFILE = "feature"
       }
     }
-    
+
     kraken-service = {
       description = "Build that gets triggered when PR has been raised to feature_01"
       substitutions = {
         _SPRING_ACTIVE_PROFILE = "feature"
       }
     }
-    
+
     tax-service = {
       description = "Build that gets triggered when PR has been raised to feature_01"
       substitutions = {
         _SPRING_ACTIVE_PROFILE = "feature"
       }
     }
-    
+
     user-service = {
       description = "Build that gets triggered when PR has been raised to feature_01"
       # user-service has additional Firebase configuration
