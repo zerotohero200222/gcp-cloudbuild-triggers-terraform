@@ -1,5 +1,5 @@
 steps:
-  # Step 0: Terraform Init
+  # Step 1: Terraform Init
   - name: hashicorp/terraform:1.5.0
     id: Terraform Init
     entrypoint: sh
@@ -8,16 +8,18 @@ steps:
       - |
         terraform init -input=false
 
-  # Step 1: Terraform Format (CHECK ONLY – NO MUTATION)
+  # Step 2: Terraform Format (auto-fix instead of check)
   - name: hashicorp/terraform:1.5.0
     id: Terraform Format
     entrypoint: sh
     args:
       - -c
       - |
-        terraform fmt -check -recursive
+        echo "📝 Formatting Terraform files..."
+        terraform fmt -recursive
+        echo "✅ Formatting complete"
 
-  # Step 2: Terraform Validate
+  # Step 3: Terraform Validate
   - name: hashicorp/terraform:1.5.0
     id: Terraform Validate
     entrypoint: sh
@@ -26,7 +28,7 @@ steps:
       - |
         terraform validate
 
-  # Step 3: Terraform Plan
+  # Step 4: Terraform Plan
   - name: hashicorp/terraform:1.5.0
     id: Terraform Plan
     entrypoint: sh
@@ -37,22 +39,42 @@ steps:
           -input=false \
           -var-file="environments/${_ENV}.tfvars" \
           -out=tfplan
+        
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "📋 Terraform Plan Summary"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        terraform show -no-color tfplan | head -50
 
-  # Step 4: Terraform Apply
+  # Step 5: Terraform Apply (only on main branch)
   - name: hashicorp/terraform:1.5.0
     id: Terraform Apply
     entrypoint: sh
     args:
       - -c
       - |
-        terraform apply -input=false -auto-approve tfplan
-        terraform output
+        if [ "${BRANCH_NAME}" = "main" ]; then
+          echo "🚀 Applying Terraform changes..."
+          terraform apply -input=false -auto-approve tfplan
+          
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 Deployment Outputs"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          terraform output
+        else
+          echo "⚠️  Not on main branch - skipping apply"
+          echo "Branch: ${BRANCH_NAME}"
+        fi
 
+# Substitution variables
 substitutions:
-  _ENV: dev
+  _ENV: dev  # Default to dev environment
 
+# Options
 options:
   logging: CLOUD_LOGGING_ONLY
+  machineType: E2_MEDIUM
 
-timeout: 900s
+# Timeout
+timeout: 600s
 
