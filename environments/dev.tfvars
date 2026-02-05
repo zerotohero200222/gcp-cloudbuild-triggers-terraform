@@ -7,5 +7,6 @@ region                = "us-central1"
 repository_owner      = "bharathaddankieswar"
 service_account_email = "162720148859-compute@developer.gserviceaccount.com"
 environment           = "dev"
-base_branch          = "feature_01"
+base_branch           = "feature_01"
 firebase_project_id   = "dev-prj-frontend-apps"
+butter_token          = "your-butter-token-here"  # Replace with actual token
