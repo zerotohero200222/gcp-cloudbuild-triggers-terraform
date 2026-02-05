@@ -39,3 +39,9 @@ variable "firebase_project_id" {
   description = "Firebase Project ID used by user-service"
   type        = string
 }
+
+variable "butter_token" {
+  description = "Butter CMS token for frontend-web-static service"
+  type        = string
+  sensitive   = true
+}
