@@ -105,3 +105,4 @@ output "snapshot_triggers_details" {
     }
   }
 }
+
