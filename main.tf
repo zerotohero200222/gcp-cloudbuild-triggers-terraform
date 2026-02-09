@@ -534,13 +534,8 @@ resource "google_cloudbuild_trigger" "pr_build" {
   # Service account for build execution
   service_account = "projects/${local.common_config.project_id}/serviceAccounts/${local.common_config.service_account_email}"
 
-  # Substitution variables passed to the build (only if not empty)
-  dynamic "substitutions" {
-    for_each = length(each.value.substitutions) > 0 ? [1] : []
-    content {
-      for k, v in each.value.substitutions : k => v
-    }
-  }
+  # Substitution variables passed to the build
+  substitutions = each.value.substitutions
 
   # Tags for organization and filtering
   tags = [
@@ -581,13 +576,8 @@ resource "google_cloudbuild_trigger" "snapshot_build" {
   # Service account for build execution
   service_account = "projects/${local.common_config.project_id}/serviceAccounts/${local.common_config.service_account_email}"
 
-  # Substitution variables passed to the build (only if not empty)
-  dynamic "substitutions" {
-    for_each = length(each.value.substitutions) > 0 ? [1] : []
-    content {
-      for k, v in each.value.substitutions : k => v
-    }
-  }
+  # Substitution variables passed to the build
+  substitutions = each.value.substitutions
 
   # Tags for organization and filtering
   tags = [
